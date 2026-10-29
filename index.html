@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
-<meta name="theme-color" content="#0f5c63">
+<meta name="theme-color" content="#0c3b40">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Emir">
@@ -52,6 +52,43 @@ input,select,textarea{font:400 16px inherit;font-family:inherit;padding:9px 10px
 .hint{background:var(--ambbg);border-radius:8px;padding:8px 10px;font-size:13px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:8px;font-size:14px}
 @media (max-width:560px){.row{flex-direction:column;align-items:stretch}.acts{justify-content:flex-start}.two{grid-template-columns:1fr}}
+:root{--hd:#0c3b40}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--hd:#0a2a2e}}
+header{max-width:none;margin:0;padding:18px max(20px,calc((100% - 1100px)/2)) 16px;background:var(--hd);color:#fff}
+h1{font-size:22px;color:#fff}
+header .sub{color:#b8d4d7}
+header .btn{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.28)}
+main{padding-top:18px;padding-bottom:150px}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:20;max-width:none;margin:0;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));background:var(--surf);border-top:1px solid var(--line);border-bottom:0;justify-content:space-around}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;font-weight:600;padding:6px 4px;border:0;border-radius:10px;max-width:220px}
+nav button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav button[aria-selected=true]{color:var(--pet);background:color-mix(in srgb,var(--pet) 13%,transparent)}
+.fab{bottom:calc(84px + env(safe-area-inset-bottom,0px));min-height:48px}
+.toast{bottom:150px}
+.btn{border-radius:10px;min-height:42px}
+h2{font-size:17px;margin:26px 0 10px}
+.row{border-radius:12px;border-left-width:4px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.grow{flex:1;min-width:0}
+.av{width:40px;height:40px;border-radius:50%;background:color-mix(in srgb,var(--pet) 16%,var(--surf));color:var(--pet);display:grid;place-items:center;font-weight:800;flex:none}
+.zeit{min-width:56px;font-weight:800;font-size:18px;color:var(--pet);flex:none}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:12px}
+.stat b{display:block;font-size:28px;line-height:1.1;font-weight:800;color:var(--pet)}
+.stat span{font-size:13px;color:var(--mute)}
+.empty{background:var(--surf);border-radius:12px}
+.cols{grid-template-columns:repeat(5,minmax(230px,1fr));scroll-snap-type:x proximity}
+.col{scroll-snap-align:start;border-radius:14px}
+.col:nth-child(1){--sc:#6b8794}.col:nth-child(2){--sc:#2a8c9b}.col:nth-child(3){--sc:#d9922b}.col:nth-child(4){--sc:#8a5fc4}.col:nth-child(5){--sc:#2e8b57}
+.col h3{justify-content:flex-start;align-items:center;gap:8px}
+.col h3::before{content:"";flex:none;width:10px;height:10px;border-radius:50%;background:var(--sc)}
+.col h3 span{margin-left:auto}
+.card{border-left:4px solid var(--sc);border-radius:10px}
+.card.late{border-left-color:var(--red)}
+dialog{border-radius:18px}
+form h2{margin:0 0 2px;font-size:20px}
+input,select,textarea{min-height:44px;border-radius:10px}
+.hint{border-radius:10px}
+@media (max-width:560px){.row{flex-direction:row;flex-wrap:wrap;align-items:center}.row .grow{flex:1 1 calc(100% - 60px)}.row .acts{flex:1 1 100%;justify-content:flex-start}.stats{gap:8px}.stat{padding:10px}.stat b{font-size:24px}.cols{grid-template-columns:repeat(5,84%)}}
 </style>
 </head>
 <body>
@@ -60,15 +97,16 @@ input,select,textarea{font:400 16px inherit;font-family:inherit;padding:9px 10px
   <button class="btn" id="reset" title="Beispieldaten neu laden">Zurücksetzen</button>
 </header>
 <nav role="tablist">
-  <button role="tab" id="t-heute" aria-selected="true">Heute</button>
-  <button role="tab" id="t-trichter" aria-selected="false">Trichter</button>
-  <button role="tab" id="t-termine" aria-selected="false">Termine</button>
+  <button role="tab" id="t-heute" aria-selected="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Heute</button>
+  <button role="tab" id="t-trichter" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18l-7 8v7l-4 2v-9z"/></svg>Trichter</button>
+  <button role="tab" id="t-termine" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Termine</button>
 </nav>
 <main id="main"></main>
 <button class="btn pri fab" id="neu">+ Neuer Kontakt</button>
 
 <dialog id="dlg">
   <form method="dialog" id="f" onsubmit="return false">
+    <h2 id="dtitle">Kontakt</h2>
     <div class="two">
       <label>Anrede<select id="anrede"><option>Frau</option><option>Herr</option></select></label>
       <label>Nachname<input id="name" required autocomplete="off"></label>
@@ -94,6 +132,7 @@ input,select,textarea{font:400 16px inherit;font-family:inherit;padding:9px 10px
 </dialog>
 
 <dialog id="dlg2"><form method="dialog" onsubmit="return false">
+  <h2>Neuer Termin</h2>
   <label>Kontakt<select id="tk"></select></label>
   <div class="two"><label>Datum<input type="date" id="td"></label><label>Uhrzeit<input type="time" id="tz" value="10:00"></label></div>
   <label>Art<select id="ta"></select></label>
@@ -157,7 +196,7 @@ function render(){
   var still=offen.filter(function(c){return faellig.indexOf(c)<0&&tage(heute(),c.last)>=7});
   var bald=offen.filter(function(c){return c.stufe>=2&&faellig.indexOf(c)<0&&c.next&&tage(c.next,heute())<=7});
   var tt=daten.filter(function(c){return c.tdat==heute()}).sort(function(a,b){return (a.tzeit||"")<(b.tzeit||"")?-1:1});
-  h+="<h2>Termine heute ("+tt.length+")</h2>"+(tt.length?tt.map(function(c){return terminZeile(c)}).join(""):'<div class="empty">Heute keine Termine.</div>');
+  h+=stats(faellig.length,tt.length,offen.length);h+="<h2>Termine heute ("+tt.length+")</h2>"+(tt.length?tt.map(function(c){return terminZeile(c)}).join(""):'<div class="empty">Heute keine Termine.</div>');
   h+="<h2>Heute anrufen ("+faellig.length+")</h2>";
   h+=faellig.length?faellig.map(function(c){return zeile(c,c.next<heute()?"late":"today",true)}).join(""):'<div class="empty">Nichts fällig. Gut gemacht.</div>';
   h+="<h2>Länger still</h2>";
@@ -175,7 +214,7 @@ function render(){
  document.getElementById("datum").textContent=new Date().toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long"});
 }
 function terminZeile(c,vorbei){
- return '<div class="row '+(vorbei?'late':'today')+'"><div><b>'+esc(c.tzeit||"–")+' · '+esc(c.tart||"Termin")+'</b><div class="meta">'+esc(c.anrede+" "+c.name)+' · '+esc(c.modell)+(c.notiz?'<br>'+esc(c.notiz):'')+'</div></div><div class="acts"><button class="btn pri" data-tdone="'+c.id+'">Erledigt</button><button class="btn" data-id="'+c.id+'">Öffnen</button></div></div>'}
+ return '<div class="row '+(vorbei?'late':'today')+'"><div class="zeit">'+esc(c.tzeit||"–")+'</div><div class="grow"><b>'+esc(c.tart||"Termin")+'</b><div class="meta">'+esc(c.anrede+" "+c.name)+' · '+esc(c.modell)+(c.notiz?'<br>'+esc(c.notiz):'')+'</div></div><div class="acts"><button class="btn pri" data-tdone="'+c.id+'">Erledigt</button><button class="btn" data-id="'+c.id+'">Öffnen</button></div></div>'}
 function termineHtml(){
  var l=daten.filter(function(c){return c.tdat}).sort(function(a,b){return (a.tdat+(a.tzeit||""))<(b.tdat+(b.tzeit||""))?-1:1});
  if(!l.length)return '<div class="empty">Noch keine Termine. Tippe auf „+ Neuer Termin“.</div>';
@@ -184,8 +223,10 @@ function termineHtml(){
   if(c.tdat!=day){day=c.tdat;var lab=new Date(day+"T12:00:00").toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long"});h+="<h2>"+lab+' <span class="meta">('+(day<heute()?"vorbei":wann(day))+")</span></h2>"}
   h+=terminZeile(c,day<heute())});
  return h}
+function av(c){return '<span class="av">'+esc((c.name||"?").charAt(0).toUpperCase())+'</span>'}
+function stats(a,b,c){return '<div class="stats"><div class="stat"><b>'+b+'</b><span>Termine heute</span></div><div class="stat"><b>'+a+'</b><span>Anrufe fällig</span></div><div class="stat"><b>'+c+'</b><span>Offene Kontakte</span></div></div>'}
 function zeile(c,cls,aktion,extra){
- return '<div class="row '+cls+'"><div><b>'+esc(c.anrede+" "+c.name)+'</b> <span class="meta">· '+esc(c.modell)+'</span><div class="meta">'+(extra?extra:'<span class="when">'+wann(c.next)+'</span> · '+STUFEN[c.stufe])+(c.notiz?'<br>'+esc(c.notiz):'')+'</div></div><div class="acts">'+
+ return '<div class="row '+cls+'">'+av(c)+'<div class="grow"><b>'+esc(c.anrede+" "+c.name)+'</b> <span class="meta">· '+esc(c.modell)+'</span><div class="meta">'+(extra?extra:'<span class="when">'+wann(c.next)+'</span> · '+STUFEN[c.stufe])+(c.notiz?'<br>'+esc(c.notiz):'')+'</div></div><div class="acts">'+
  (aktion?'<button class="btn pri" data-done="'+c.id+'">Erledigt, +3 Tage</button>':'')+'<button class="btn" data-id="'+c.id+'">Öffnen</button></div></div>'}
 
 var dlg=document.getElementById("dlg"),$=function(i){return document.getElementById(i)};
@@ -194,7 +235,7 @@ Object.keys(VORLAGEN).forEach(function(k){var o=document.createElement("option")
 function oeffnen(id){
  aktuell=id;var c=daten.find(function(x){return x.id==id})||{anrede:"Frau",name:"",modell:"",stufe:0,next:iso(2),notiz:""};
  $("anrede").value=c.anrede;$("name").value=c.name;$("modell").value=c.modell;$("stufe").value=c.stufe;$("next").value=c.next||"";$("notiz").value=c.notiz||"";
- $("tdat").value=c.tdat||"";$("tzeit").value=c.tzeit||"";$("tart").value=c.tart||"";
+ $("dtitle").textContent=id?"Kontakt bearbeiten":"Neuer Kontakt";$("tdat").value=c.tdat||"";$("tzeit").value=c.tzeit||"";$("tart").value=c.tart||"";
  $("vorlage").value="";$("text").value="";$("loeschen").style.visibility=id?"visible":"hidden";dlg.showModal();
 }
 function fuellen(){var v=VORLAGEN[$("vorlage").value];if(!v){$("text").value="";return}
