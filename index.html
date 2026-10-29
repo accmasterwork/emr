@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#0f5c63">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Emir">
+<title>Emirs Verkaufsbuch</title>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f3;--surf:#fff;--ink:#14232b;--mute:#5d6e77;--line:#d5dce0;--pet:#0f5c63;--petink:#fff;--amb:#e8a317;--ambbg:#fdf1d6;--red:#b3261e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a1f;--surf:#18262d;--ink:#e8eef0;--mute:#93a5ad;--line:#2b3c44;--pet:#4fb3ba;--petink:#08272a;--amb:#f0b73a;--ambbg:#3a2f12;--red:#ff8a80}}
+:root[data-theme="dark"]{--bg:#0f1a1f;--surf:#18262d;--ink:#e8eef0;--mute:#93a5ad;--line:#2b3c44;--pet:#4fb3ba;--petink:#08272a;--amb:#f0b73a;--ambbg:#3a2f12;--red:#ff8a80}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 "Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px 8px;max-width:1100px;margin:auto}
+h1{font-size:26px;font-weight:800;margin:0;letter-spacing:-.02em}
+.sub{color:var(--mute);font-size:14px}
+nav{display:flex;gap:4px;padding:0 20px;max-width:1100px;margin:8px auto 0;border-bottom:1px solid var(--line)}
+nav button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;font:600 16px inherit;font-family:inherit;color:var(--mute);cursor:pointer}
+nav button[aria-selected=true]{color:var(--ink);border-color:var(--pet)}
+main{max-width:1100px;margin:auto;padding:16px 20px 96px}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--amb);outline-offset:2px}
+.btn{font:600 15px inherit;font-family:inherit;border:1px solid var(--line);background:var(--surf);color:var(--ink);padding:9px 14px;border-radius:8px;cursor:pointer}
+.btn.pri{background:var(--pet);color:var(--petink);border-color:var(--pet)}
+.fab{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));padding:14px 20px;border-radius:999px;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+h2{font-size:18px;margin:22px 0 8px}
+.row{background:var(--surf);border:1px solid var(--line);border-left:5px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:center;justify-content:space-between}
+.row.late{border-left-color:var(--red)}.row.today{border-left-color:var(--amb)}.row.quiet{border-left-color:var(--mute)}
+.row b{font-weight:600}.meta{color:var(--mute);font-size:14px}
+.late .when{color:var(--red);font-weight:600}
+.acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.cols{display:grid;grid-template-columns:repeat(5,minmax(210px,1fr));gap:12px;overflow-x:auto;padding-bottom:8px}
+.col{background:color-mix(in srgb,var(--surf) 55%,var(--bg));border-radius:10px;padding:10px;min-height:120px}
+.col h3{font-size:15px;margin:0 0 8px;display:flex;justify-content:space-between}
+.col h3 span{color:var(--mute);font-weight:400}
+.card{width:100%;text-align:left;background:var(--surf);border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:8px;cursor:pointer;color:var(--ink);font:inherit}
+.card .when{font-size:13px;color:var(--mute)}.card.late .when{color:var(--red);font-weight:600}
+.empty{color:var(--mute);padding:18px;text-align:center;border:1px dashed var(--line);border-radius:8px}
+dialog{border:0;border-radius:14px;padding:0;width:min(520px,94vw);background:var(--surf);color:var(--ink);max-height:92vh}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+form{padding:20px;display:grid;gap:12px}
+label{display:grid;gap:4px;font-size:14px;font-weight:600}
+input,select,textarea{font:400 16px inherit;font-family:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dlgfoot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.hint{background:var(--ambbg);border-radius:8px;padding:8px 10px;font-size:13px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:8px;font-size:14px}
+@media (max-width:560px){.row{flex-direction:column;align-items:stretch}.acts{justify-content:flex-start}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>Emirs Verkaufsbuch</h1><div class="sub"><span id="datum"></span> · <span id="sync"></span></div></div>
+  <button class="btn" id="reset" title="Beispieldaten neu laden">Zurücksetzen</button>
+</header>
+<nav role="tablist">
+  <button role="tab" id="t-heute" aria-selected="true">Heute</button>
+  <button role="tab" id="t-trichter" aria-selected="false">Trichter</button>
+  <button role="tab" id="t-termine" aria-selected="false">Termine</button>
+</nav>
+<main id="main"></main>
+<button class="btn pri fab" id="neu">+ Neuer Kontakt</button>
+
+<dialog id="dlg">
+  <form method="dialog" id="f" onsubmit="return false">
+    <div class="two">
+      <label>Anrede<select id="anrede"><option>Frau</option><option>Herr</option></select></label>
+      <label>Nachname<input id="name" required autocomplete="off"></label>
+    </div>
+    <div class="two">
+      <label>Modell<input id="modell" placeholder="z. B. Golf 8 Life" autocomplete="off"></label>
+      <label>Stufe<select id="stufe"></select></label>
+    </div>
+    <label>Nächster Kontakt<input type="date" id="next"></label>
+    <div class="two"><label>Termin am<input type="date" id="tdat"></label><label>Uhrzeit<input type="time" id="tzeit"></label></div>
+    <label>Terminart<select id="tart"><option value="">kein Termin</option></select></label>
+    <label>Notiz<textarea id="notiz" rows="3" placeholder="Was war wichtig? Kinder, Pendelstrecke, Budget …"></textarea></label>
+    <div class="hint">Keine Telefonnummern oder Adressen speichern. Nur Nachname und kurze Notizen, die Kundendaten gehören ins Firmen-CRM.</div>
+    <label>Nachrichtenvorlage
+      <select id="vorlage"><option value="">Vorlage wählen …</option></select></label>
+    <textarea id="text" rows="5" placeholder="Hier erscheint die Nachricht."></textarea>
+    <button type="button" class="btn" id="kopieren">Nachricht kopieren</button>
+    <div class="dlgfoot">
+      <button type="button" class="btn" id="loeschen">Löschen</button>
+      <span><button type="button" class="btn" id="abbr">Abbrechen</button> <button type="button" class="btn pri" id="speichern">Speichern</button></span>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlg2"><form method="dialog" onsubmit="return false">
+  <label>Kontakt<select id="tk"></select></label>
+  <div class="two"><label>Datum<input type="date" id="td"></label><label>Uhrzeit<input type="time" id="tz" value="10:00"></label></div>
+  <label>Art<select id="ta"></select></label>
+  <div class="dlgfoot"><span></span><span><button type="button" class="btn" id="t-abbr">Abbrechen</button> <button type="button" class="btn pri" id="t-ok">Termin speichern</button></span></div>
+</form></dialog>
+
+<script>
+var STUFEN=["Erstkontakt","Probefahrt","Angebot","Entscheidung","Verkauft"];
+var VORLAGEN={
+ "Danke nach Probefahrt":"Guten Tag {A} {N},\n\nvielen Dank für Ihren Besuch und die Probefahrt mit dem {M}. Ich hoffe, er hat Ihnen gefallen. Wenn Sie Fragen haben oder ein Angebot wünschen, melden Sie sich jederzeit bei mir.\n\nFreundliche Grüße",
+ "Angebot nachfassen":"Guten Tag {A} {N},\n\nich wollte kurz nachfragen, ob Sie mein Angebot für den {M} in Ruhe ansehen konnten. Gern passe ich es an, wenn etwas offen ist.\n\nFreundliche Grüße",
+ "Termin bestätigen":"Guten Tag {A} {N},\n\nhiermit bestätige ich unseren Termin zum {M}. Bitte bringen Sie Ihren Führerschein mit. Falls etwas dazwischenkommt, geben Sie mir einfach Bescheid.\n\nFreundliche Grüße",
+ "Fahrzeug abholbereit":"Guten Tag {A} {N},\n\nIhr {M} ist bereit zur Übergabe. Wann passt es Ihnen, ihn bei uns abzuholen?\n\nFreundliche Grüße"
+};
+var KEY="verkaufsbuch-v1",daten=[],tomb=[],frisch=false,ref=null,timer=null,aktuell=null,tab="heute";
+function iso(d){var x=new Date();x.setDate(x.getDate()+d);return x.toISOString().slice(0,10)}
+function heute(){return iso(0)}
+function beispiel(){return [
+ {id:1,anrede:"Frau",name:"Müller",modell:"Golf 8 Life",stufe:1,next:iso(-2),last:iso(-5),notiz:"Probefahrt gut gelaufen, fragt nach Anhängerkupplung."},
+ {id:2,anrede:"Herr",name:"Yılmaz",modell:"Tiguan eHybrid",stufe:2,next:iso(0),last:iso(-3),notiz:"Vergleicht mit Firmenwagen-Angebot."},
+ {id:3,anrede:"Frau",name:"Schneider",modell:"ID.3 Pro",stufe:3,next:iso(2),last:iso(-1),notiz:"Entscheidet nach Absprache mit Ehemann."},
+ {id:4,anrede:"Herr",name:"Becker",modell:"Passat Variant",stufe:0,next:iso(4),last:iso(-9),notiz:"Pendelt 60 km täglich, Diesel gewünscht."},
+ {id:5,anrede:"Frau",name:"Kaya",modell:"Polo Style",stufe:4,next:iso(14),last:iso(-1),notiz:"Übergabe nächste Woche, Schlüsselfoto schicken."}
+]}
+function laden(){try{var s=localStorage.getItem(KEY);if(s){JSON.parse(s).forEach(function(c){(c.del?tomb:daten).push(c)});return}}catch(e){}frisch=true}
+function lokal(){try{localStorage.setItem(KEY,JSON.stringify(daten.concat(tomb)))}catch(e){}}
+function sichern(){lokal();hochladen()}
+function stat(t){var e=document.getElementById("sync");if(e)e.textContent=t}
+function hochladen(){if(!ref)return;stat("Speichert …");clearTimeout(timer);timer=setTimeout(function(){ref.set({items:daten.concat(tomb)}).then(function(){stat("Synchronisiert")},function(){stat("Sync fehlgeschlagen")})},600)}
+function merge(rem){var r={},m={},need=false;rem.forEach(function(c){r[c.id]=c});daten.concat(tomb).concat(rem).forEach(function(c){var o=m[c.id];if(!o||(c.u||0)>(o.u||0))m[c.id]=c});daten=[];tomb=[];Object.keys(m).forEach(function(k){var c=m[k],x=r[c.id];if(!x||(x.u||0)<(c.u||0))need=true;(c.del?tomb:daten).push(c)});return need}
+function ohneSync(t){if(frisch){daten=beispiel();frisch=false;lokal();render()}stat(t)}
+async function sync(){
+ try{
+  if(!window.claude||!claude.use)return ohneSync("Nur auf diesem Gerät");
+  var us=await claude.use("user"),d=await claude.use("db");
+  var id=us&&await us.id();
+  if(!d||!id)return ohneSync("Nur auf diesem Gerät");
+  ref=d.doc("data/users/"+id+"/buch");stat("Verbinde …");
+  ref.onSnapshot(function(s){
+   var rem=s.exists?(s.data().items||[]):[];
+   if(!s.exists){if(frisch){daten=beispiel();frisch=false}hochladen()}
+   else{frisch=false;if(merge(rem))hochladen();else stat("Synchronisiert")}
+   lokal();render()
+  },function(){ref=null;ohneSync("Offline, nur lokal")});
+ }catch(e){ohneSync("Nur auf diesem Gerät")}
+}
+function tage(a,b){return Math.round((new Date(a)-new Date(b))/864e5)}
+function wann(d){if(!d)return"kein Termin";var t=tage(d,heute());if(t<0)return"überfällig seit "+(-t)+(t==-1?" Tag":" Tagen");if(t==0)return"heute";if(t==1)return"morgen";return"in "+t+" Tagen"}
+function esc(s){return String(s||"").replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function toast(m){var t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove()},1800)}
+
+function render(){
+ document.getElementById("t-heute").setAttribute("aria-selected",tab=="heute");
+ document.getElementById("t-trichter").setAttribute("aria-selected",tab=="trichter");
+ document.getElementById("t-termine").setAttribute("aria-selected",tab=="termine");
+ document.getElementById("neu").textContent=tab=="termine"?"+ Neuer Termin":"+ Neuer Kontakt";
+ var m=document.getElementById("main"),h="";
+ var offen=daten.filter(function(c){return c.stufe<4});
+ if(tab=="heute"){
+  var faellig=offen.filter(function(c){return c.next&&c.next<=heute()}).sort(function(a,b){return a.next<b.next?-1:1});
+  var still=offen.filter(function(c){return faellig.indexOf(c)<0&&tage(heute(),c.last)>=7});
+  var bald=offen.filter(function(c){return c.stufe>=2&&faellig.indexOf(c)<0&&c.next&&tage(c.next,heute())<=7});
+  var tt=daten.filter(function(c){return c.tdat==heute()}).sort(function(a,b){return (a.tzeit||"")<(b.tzeit||"")?-1:1});
+  h+="<h2>Termine heute ("+tt.length+")</h2>"+(tt.length?tt.map(function(c){return terminZeile(c)}).join(""):'<div class="empty">Heute keine Termine.</div>');
+  h+="<h2>Heute anrufen ("+faellig.length+")</h2>";
+  h+=faellig.length?faellig.map(function(c){return zeile(c,c.next<heute()?"late":"today",true)}).join(""):'<div class="empty">Nichts fällig. Gut gemacht.</div>';
+  h+="<h2>Länger still</h2>";
+  h+=still.length?still.map(function(c){return zeile(c,"quiet",false,"seit "+tage(heute(),c.last)+" Tagen kein Kontakt")}).join(""):'<div class="empty">Alle Kontakte sind aktuell.</div>';
+  h+="<h2>Könnte diese Woche abschließen</h2>";
+  h+=bald.length?bald.map(function(c){return zeile(c,"",false,STUFEN[c.stufe]+" · "+wann(c.next))}).join(""):'<div class="empty">Noch keine Kandidaten.</div>';
+ }else{
+  if(tab=="termine"){h+=termineHtml()}else h+='<div class="cols">'+STUFEN.map(function(s,i){
+   var l=daten.filter(function(c){return c.stufe==i});
+   return '<section class="col"><h3>'+s+'<span>'+l.length+'</span></h3>'+l.map(function(c){
+    var late=i<4&&c.next&&c.next<heute();
+    return '<button class="card'+(late?" late":"")+'" data-id="'+c.id+'"><b>'+esc(c.anrede+" "+c.name)+'</b><br><span class="meta">'+esc(c.modell)+'</span><div class="when">'+(i<4?wann(c.next):"abgeschlossen")+'</div></button>'}).join("")+'</section>'}).join("")+'</div>';
+ }
+ m.innerHTML=h;
+ document.getElementById("datum").textContent=new Date().toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long"});
+}
+function terminZeile(c,vorbei){
+ return '<div class="row '+(vorbei?'late':'today')+'"><div><b>'+esc(c.tzeit||"–")+' · '+esc(c.tart||"Termin")+'</b><div class="meta">'+esc(c.anrede+" "+c.name)+' · '+esc(c.modell)+(c.notiz?'<br>'+esc(c.notiz):'')+'</div></div><div class="acts"><button class="btn pri" data-tdone="'+c.id+'">Erledigt</button><button class="btn" data-id="'+c.id+'">Öffnen</button></div></div>'}
+function termineHtml(){
+ var l=daten.filter(function(c){return c.tdat}).sort(function(a,b){return (a.tdat+(a.tzeit||""))<(b.tdat+(b.tzeit||""))?-1:1});
+ if(!l.length)return '<div class="empty">Noch keine Termine. Tippe auf „+ Neuer Termin“.</div>';
+ var h="",day="";
+ l.forEach(function(c){
+  if(c.tdat!=day){day=c.tdat;var lab=new Date(day+"T12:00:00").toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long"});h+="<h2>"+lab+' <span class="meta">('+(day<heute()?"vorbei":wann(day))+")</span></h2>"}
+  h+=terminZeile(c,day<heute())});
+ return h}
+function zeile(c,cls,aktion,extra){
+ return '<div class="row '+cls+'"><div><b>'+esc(c.anrede+" "+c.name)+'</b> <span class="meta">· '+esc(c.modell)+'</span><div class="meta">'+(extra?extra:'<span class="when">'+wann(c.next)+'</span> · '+STUFEN[c.stufe])+(c.notiz?'<br>'+esc(c.notiz):'')+'</div></div><div class="acts">'+
+ (aktion?'<button class="btn pri" data-done="'+c.id+'">Erledigt, +3 Tage</button>':'')+'<button class="btn" data-id="'+c.id+'">Öffnen</button></div></div>'}
+
+var dlg=document.getElementById("dlg"),$=function(i){return document.getElementById(i)};
+$("stufe").innerHTML=STUFEN.map(function(s,i){return '<option value="'+i+'">'+s+'</option>'}).join("");
+Object.keys(VORLAGEN).forEach(function(k){var o=document.createElement("option");o.textContent=k;o.value=k;$("vorlage").appendChild(o)});
+function oeffnen(id){
+ aktuell=id;var c=daten.find(function(x){return x.id==id})||{anrede:"Frau",name:"",modell:"",stufe:0,next:iso(2),notiz:""};
+ $("anrede").value=c.anrede;$("name").value=c.name;$("modell").value=c.modell;$("stufe").value=c.stufe;$("next").value=c.next||"";$("notiz").value=c.notiz||"";
+ $("tdat").value=c.tdat||"";$("tzeit").value=c.tzeit||"";$("tart").value=c.tart||"";
+ $("vorlage").value="";$("text").value="";$("loeschen").style.visibility=id?"visible":"hidden";dlg.showModal();
+}
+function fuellen(){var v=VORLAGEN[$("vorlage").value];if(!v){$("text").value="";return}
+ $("text").value=v.replace("{A}",$("anrede").value).replace("{N}",$("name").value||"…").replace("{M}",$("modell").value||"Fahrzeug")}
+$("vorlage").onchange=fuellen;$("anrede").onchange=fuellen;
+$("kopieren").onclick=function(){var t=$("text").value;if(!t){toast("Zuerst eine Vorlage wählen");return}
+ try{navigator.clipboard.writeText(t).then(function(){toast("Kopiert")},function(){$("text").select();document.execCommand("copy");toast("Kopiert")})}catch(e){$("text").select();toast("Text markiert, bitte kopieren")}};
+$("abbr").onclick=function(){dlg.close()};
+$("speichern").onclick=function(){
+ if(!$("name").value.trim()){$("name").focus();toast("Bitte Nachnamen eintragen");return}
+ var c=daten.find(function(x){return x.id==aktuell});
+ if(!c){c={id:Date.now()};daten.push(c)}
+ c.anrede=$("anrede").value;c.name=$("name").value.trim();c.modell=$("modell").value.trim();c.stufe=+$("stufe").value;c.next=$("next").value;c.notiz=$("notiz").value.trim();c.last=heute();c.u=Date.now();
+ c.tdat=$("tdat").value;c.tzeit=$("tzeit").value;c.tart=$("tart").value;if(!c.tdat){c.tzeit="";c.tart=""}
+ sichern();dlg.close();render();toast("Gespeichert")};
+$("loeschen").onclick=function(){if(confirm("Diesen Kontakt löschen?")){tomb.push({id:aktuell,del:true,u:Date.now()});daten=daten.filter(function(x){return x.id!=aktuell});sichern();dlg.close();render();toast("Gelöscht")}};
+$("neu").onclick=function(){if(tab=="termine")termin();else oeffnen(null)};
+$("reset").onclick=function(){if(confirm("Alle Einträge durch Beispieldaten ersetzen?")){daten.forEach(function(c){tomb.push({id:c.id,del:true,u:Date.now()})});daten=beispiel().map(function(c,i){c.id=Date.now()+i;c.u=Date.now();return c});sichern();render()}};
+$("t-heute").onclick=function(){tab="heute";render()};
+$("t-trichter").onclick=function(){tab="trichter";render()};
+$("t-termine").onclick=function(){tab="termine";render()};
+var ARTEN=["Probefahrt","Beratung","Angebotsgespräch","Fahrzeugübergabe","Telefontermin"];
+ARTEN.forEach(function(a){["tart","ta"].forEach(function(i){var o=document.createElement("option");o.textContent=a;o.value=a;$(i).appendChild(o)})});
+function termin(){
+ var l=daten.filter(function(c){return c.stufe<4});
+ if(!l.length){toast("Zuerst einen Kontakt anlegen");return}
+ $("tk").innerHTML=l.map(function(c){return '<option value="'+c.id+'">'+esc(c.anrede+" "+c.name+" · "+c.modell)+'</option>'}).join("");
+ $("td").value=iso(1);$("dlg2").showModal()}
+$("t-abbr").onclick=function(){$("dlg2").close()};
+$("t-ok").onclick=function(){var c=daten.find(function(x){return x.id==$("tk").value});if(!c||!$("td").value){toast("Bitte Datum wählen");return}
+ c.tdat=$("td").value;c.tzeit=$("tz").value;c.tart=$("ta").value;c.u=Date.now();sichern();$("dlg2").close();render();toast("Termin gespeichert")};
+$("main").onclick=function(e){
+ var td=e.target.closest("[data-tdone]");
+ if(td){var k=daten.find(function(x){return x.id==td.dataset.tdone});k.tdat="";k.tzeit="";k.tart="";k.last=heute();k.u=Date.now();sichern();render();toast("Termin erledigt");return}
+ var d=e.target.closest("[data-done]");
+ if(d){var c=daten.find(function(x){return x.id==d.dataset.done});c.next=iso(3);c.last=heute();c.u=Date.now();sichern();render();toast("Nächster Kontakt in 3 Tagen");return}
+ var o=e.target.closest("[data-id]");if(o)oeffnen(+o.dataset.id)};
+laden();render();sync();
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
+</script>
+</body>
+</html>
