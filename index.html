@@ -89,6 +89,19 @@ form h2{margin:0 0 2px;font-size:20px}
 input,select,textarea{min-height:44px;border-radius:10px}
 .hint{border-radius:10px}
 @media (max-width:560px){.row{flex-direction:row;flex-wrap:wrap;align-items:center}.row .grow{flex:1 1 calc(100% - 60px)}.row .acts{flex:1 1 100%;justify-content:flex-start}.stats{gap:8px}.stat{padding:10px}.stat b{font-size:24px}.cols{grid-template-columns:repeat(5,84%)}}
+html,body{max-width:100%;overflow-x:hidden}
+header{flex-wrap:wrap}
+.two>label{min-width:0}
+input,select,textarea{min-width:0;max-width:100%}
+input[type=date],input[type=time]{-webkit-appearance:none;appearance:none}
+dialog{max-width:calc(100vw - 16px)}
+.card{overflow-wrap:anywhere}
+.chips{display:none;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.chip{font:600 14px inherit;font-family:inherit;border:1px solid var(--line);background:var(--surf);color:var(--ink);border-radius:999px;padding:8px 12px;min-height:40px;cursor:pointer}
+.chip b{color:var(--mute);font-weight:600;margin-left:4px}
+.chip.on{background:var(--pet);color:var(--petink);border-color:var(--pet)}
+.chip.on b{color:inherit}
+@media (max-width:760px){.chips{display:flex}.cols{display:block;overflow:visible}.col{display:none;background:none;padding:0;min-height:0}.col.on{display:block}.col h3{display:none}.card{padding:12px 14px;font-size:16px}.row .acts .btn{flex:1 1 auto}}
 </style>
 </head>
 <body>
@@ -204,11 +217,11 @@ function render(){
   h+="<h2>Könnte diese Woche abschließen</h2>";
   h+=bald.length?bald.map(function(c){return zeile(c,"",false,STUFEN[c.stufe]+" · "+wann(c.next))}).join(""):'<div class="empty">Noch keine Kandidaten.</div>';
  }else{
-  if(tab=="termine"){h+=termineHtml()}else h+='<div class="cols">'+STUFEN.map(function(s,i){
+  if(tab=="termine"){h+=termineHtml()}else h+=chips()+'<div class="cols">'+STUFEN.map(function(s,i){
    var l=daten.filter(function(c){return c.stufe==i});
-   return '<section class="col"><h3>'+s+'<span>'+l.length+'</span></h3>'+l.map(function(c){
+   return '<section class="col'+(i==sicht?' on':'')+'"><h3>'+s+'<span>'+l.length+'</span></h3>'+l.map(function(c){
     var late=i<4&&c.next&&c.next<heute();
-    return '<button class="card'+(late?" late":"")+'" data-id="'+c.id+'"><b>'+esc(c.anrede+" "+c.name)+'</b><br><span class="meta">'+esc(c.modell)+'</span><div class="when">'+(i<4?wann(c.next):"abgeschlossen")+'</div></button>'}).join("")+'</section>'}).join("")+'</div>';
+    return '<button class="card'+(late?" late":"")+'" data-id="'+c.id+'"><b>'+esc(c.anrede+" "+c.name)+'</b><br><span class="meta">'+esc(c.modell)+'</span><div class="when">'+(i<4?wann(c.next):"abgeschlossen")+'</div></button>'}).join("")+(l.length?"":'<div class="empty">Keine Kontakte in dieser Stufe.</div>')+'</section>'}).join("")+'</div>';
  }
  m.innerHTML=h;
  document.getElementById("datum").textContent=new Date().toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long"});
@@ -223,6 +236,8 @@ function termineHtml(){
   if(c.tdat!=day){day=c.tdat;var lab=new Date(day+"T12:00:00").toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long"});h+="<h2>"+lab+' <span class="meta">('+(day<heute()?"vorbei":wann(day))+")</span></h2>"}
   h+=terminZeile(c,day<heute())});
  return h}
+var sicht=0;
+function chips(){return '<div class="chips">'+STUFEN.map(function(s,i){var n=daten.filter(function(c){return c.stufe==i}).length;return '<button class="chip'+(i==sicht?' on':'')+'" data-sicht="'+i+'">'+s+' <b>'+n+'</b></button>'}).join("")+'</div>'}
 function av(c){return '<span class="av">'+esc((c.name||"?").charAt(0).toUpperCase())+'</span>'}
 function stats(a,b,c){return '<div class="stats"><div class="stat"><b>'+b+'</b><span>Termine heute</span></div><div class="stat"><b>'+a+'</b><span>Anrufe fällig</span></div><div class="stat"><b>'+c+'</b><span>Offene Kontakte</span></div></div>'}
 function zeile(c,cls,aktion,extra){
@@ -268,6 +283,8 @@ $("t-abbr").onclick=function(){$("dlg2").close()};
 $("t-ok").onclick=function(){var c=daten.find(function(x){return x.id==$("tk").value});if(!c||!$("td").value){toast("Bitte Datum wählen");return}
  c.tdat=$("td").value;c.tzeit=$("tz").value;c.tart=$("ta").value;c.u=Date.now();sichern();$("dlg2").close();render();toast("Termin gespeichert")};
 $("main").onclick=function(e){
+ var sc=e.target.closest("[data-sicht]");
+ if(sc){sicht=+sc.dataset.sicht;render();return}
  var td=e.target.closest("[data-tdone]");
  if(td){var k=daten.find(function(x){return x.id==td.dataset.tdone});k.tdat="";k.tzeit="";k.tart="";k.last=heute();k.u=Date.now();sichern();render();toast("Termin erledigt");return}
  var d=e.target.closest("[data-done]");
